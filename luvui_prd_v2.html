@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.prd { padding: 0 0 2rem; }
+
+header.hero { padding: 2rem 0 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 1.5rem; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--color-background-info); color: var(--color-text-info); margin-bottom: 10px; }
+header.hero h1 { font-size: 28px; font-weight: 500; color: var(--color-text-primary); line-height: 1.2; margin-bottom: 6px; }
+header.hero .sub { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 14px; }
+header.hero .mission { font-size: 15px; color: var(--color-text-primary); line-height: 1.6; padding: 12px 16px; border-left: 2px solid var(--color-border-info); background: var(--color-background-secondary); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; }
+
+.section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-tertiary); margin-bottom: 10px; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+
+.metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 16px; }
+.metric-card .label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-card .value { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+
+section.section { margin-bottom: 1.75rem; }
+h2.section-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
+
+.module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+
+button.module-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 16px;
+  text-align: left;
+  cursor: default;
+  width: 100%;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  font-family: var(--font-sans);
+}
+button.module-card:hover {
+  border-color: var(--color-border-info);
+  transform: translateY(-2px);
+}
+
+.module-icon { width: 32px; height: 32px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; font-size: 16px; }
+button.module-card h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+button.module-card p { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); background: var(--color-background-secondary); }
+.tag.purple { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+.tag.teal   { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+.tag.amber  { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
+.tag.blue   { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+.tag.coral  { background: #FAECE7; color: #711B0C; border-color: #F0997B; }
+.tag.green  { background: #EAF3DE; color: #3B6D11; border-color: #97C459; }
+
+@media (prefers-color-scheme: dark) {
+  .tag.purple { background: #26215C; color: #CECBF6; border-color: #534AB7; }
+  .tag.teal   { background: #04342C; color: #9FE1CB; border-color: #0F6E56; }
+  .tag.amber  { background: #412402; color: #FAC775; border-color: #BA7517; }
+  .tag.blue   { background: #042C53; color: #B5D4F4; border-color: #185FA5; }
+  .tag.coral  { background: #4A1B0C; color: #F5C4B3; border-color: #993C1D; }
+  .tag.green  { background: #173404; color: #C0DD97; border-color: #3B6D11; }
+}
+
+.roadmap { display: flex; flex-direction: column; gap: 0; }
+.phase { display: flex; gap: 16px; align-items: flex-start; padding: 12px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.phase:last-child { border-bottom: none; }
+.phase-num { min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+.phase-body h4 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+.phase-body p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+.db-table { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.db-table .db-header { padding: 10px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.db-table .db-header span { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.db-table .db-row { padding: 7px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; color: var(--color-text-secondary); display: flex; justify-content: space-between; }
+.db-table .db-row:last-child { border-bottom: none; }
+.db-row .field { color: var(--color-text-primary); font-weight: 500; }
+.db-row .type { color: var(--color-text-tertiary); font-size: 11px; font-family: var(--font-mono); }
+
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.plan-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; background: var(--color-background-primary); }
+.plan-card.featured { border: 2px solid var(--color-border-info); }
+.plan-card .plan-name { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 6px; }
+.plan-card .plan-credits { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.plan-card .plan-unit { font-size: 12px; color: var(--color-text-tertiary); margin-top: 3px; }
+.plan-card .plan-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--color-background-info); color: var(--color-text-info); display: inline-block; margin-bottom: 6px; }
+
+.api-wrapper { overflow-x: auto; }
+.api-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.api-table td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; }
+.api-table tr:last-child td { border-bottom: none; }
+
+.method { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; font-family: var(--font-mono); margin-right: 6px; }
+.method.post   { background: #E1F5EE; color: #085041; }
+.method.get    { background: #E6F1FB; color: #0C447C; }
+.method.put    { background: #FAEEDA; color: #633806; }
+.method.delete { background: #FCEBEB; color: #791F1F; }
+@media (prefers-color-scheme: dark) {
+  .method.post   { background: #04342C; color: #9FE1CB; }
+  .method.get    { background: #042C53; color: #B5D4F4; }
+  .method.put    { background: #412402; color: #FAC775; }
+  .method.delete { background: #501313; color: #F7C1C1; }
+}
+.route { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); }
+.route-desc { color: var(--color-text-secondary); font-size: 12px; }
+
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
+.stack-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 16px; }
+.stack-item .stack-layer { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 4px; }
+.stack-item .stack-val { font-size: 13px; color: var(--color-text-primary); font-weight: 500; }
+</style>
+</head>
+<body>
+  
+<div class="prd">
+
+  <header class="hero">
+    <div class="badge">MVP v1.0</div>
+    <h1>LuvUI</h1>
+    <p class="sub">AI-Powered React UI Platform</p>
+    <p class="mission">Empower React developers to build interfaces faster by combining a curated UI library with AI-generated components in one seamless developer platform.</p>
+  </header>
+
+  <p class="section-label">At a glance</p>
+  <div class="grid-2">
+    <div class="metric-card"><div class="label">Target audience</div><div class="value">React devs</div></div>
+    <div class="metric-card"><div class="label">Free credits</div><div class="value">5 credits</div></div>
+    <div class="metric-card"><div class="label">Payment gateway</div><div class="value">Razorpay</div></div>
+    <div class="metric-card"><div class="label">AI provider</div><div class="value">OpenRouter</div></div>
+  </div>
+
+  <section class="section">
+    <h2 class="section-title">Problem statement</h2>
+    <div class="grid-2">
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#FAEEDA"><i class="ti ti-alert-triangle" style="color:#BA7517" aria-hidden="true"></i></div>
+        <h3>Existing libraries fall short</h3>
+        <p>Rarely contain the exact component a developer needs for their project.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#FCEBEB"><i class="ti ti-robot-off" style="color:#A32D2D" aria-hidden="true"></i></div>
+        <h3>AI generators are inconsistent</h3>
+        <p>Produce low-quality UI that doesn't match an existing design system.</p>
+      </button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Tech stack</h2>
+    <div class="stack-grid">
+      <div class="stack-item"><div class="stack-layer">Frontend</div><div class="stack-val">React.js</div></div>
+      <div class="stack-item"><div class="stack-layer">Routing</div><div class="stack-val">React Router</div></div>
+      <div class="stack-item"><div class="stack-layer">Styling</div><div class="stack-val">Tailwind CSS</div></div>
+      <div class="stack-item"><div class="stack-layer">Backend</div><div class="stack-val">Node + Express</div></div>
+      <div class="stack-item"><div class="stack-layer">Database</div><div class="stack-val">MongoDB</div></div>
+      <div class="stack-item"><div class="stack-layer">Auth</div><div class="stack-val">JWT + Cookies</div></div>
+      <div class="stack-item"><div class="stack-layer">AI</div><div class="stack-val">OpenRouter</div></div>
+      <div class="stack-item"><div class="stack-layer">Payments</div><div class="stack-val">Razorpay</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Product modules</h2>
+    <div class="module-grid">
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#E6F1FB"><i class="ti ti-lock" style="color:#185FA5" aria-hidden="true"></i></div>
+        <h3>Authentication</h3>
+        <p>Register, login, logout. JWT + HTTP-only cookies, protected routes.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#EEEDFE"><i class="ti ti-user-circle" style="color:#534AB7" aria-hidden="true"></i></div>
+        <h3>User module</h3>
+        <p>Profile, avatar, credits balance, last login tracking.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#E1F5EE"><i class="ti ti-components" style="color:#0F6E56" aria-hidden="true"></i></div>
+        <h3>Component library</h3>
+        <p>Browse, search, filter, preview, copy code, install via NPM.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#FAEEDA"><i class="ti ti-sparkles" style="color:#854F0B" aria-hidden="true"></i></div>
+        <h3>AI studio</h3>
+        <p>Prompt → generate → preview → copy. Natural language to React.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#FAECE7"><i class="ti ti-history" style="color:#993C1D" aria-hidden="true"></i></div>
+        <h3>AI history</h3>
+        <p>View, copy, or delete past generations with credits used.</p>
+      </button>
+      <button class="module-card" type="button">
+        <div class="module-icon" style="background:#EAF3DE"><i class="ti ti-credit-card" style="color:#3B6D11" aria-hidden="true"></i></div>
+        <h3>Payments</h3>
+        <p>Buy credits, view purchase history, Razorpay webhook verification.</p>
+      </button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Credit plans</h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-credits">5</div>
+        <div class="plan-unit">credits on signup</div>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">Popular</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-credits">100</div>
+        <div class="plan-unit">credits / month</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-credits">300</div>
+        <div class="plan-unit">credits / month</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Power</div>
+        <div class="plan-credits">1,000</div>
+        <div class="plan-unit">credits / month</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--color-text-tertiary)">Credits are deducted only after a successful AI generation.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Database schema</h2>
+    <div class="two-col">
+      <div>
+        <div class="db-table" style="margin-bottom:10px">
+          <div class="db-header"><span><i class="ti ti-user" style="font-size:13px;margin-right:6px" aria-hidden="true"></i>User</span></div>
+          <div class="db-row"><span class="field">fullName</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">email</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">password</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">credits</span><span class="type">Number</span></div>
+          <div class="db-row"><span class="field">role</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">isVerified</span><span class="type">Boolean</span></div>
+          <div class="db-row"><span class="field">lastLogin</span><span class="type">Date</span></div>
+        </div>
+        <div class="db-table">
+          <div class="db-header"><span><i class="ti ti-components" style="font-size:13px;margin-right:6px" aria-hidden="true"></i>Component</span></div>
+          <div class="db-row"><span class="field">name</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">category</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">code</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">tags</span><span class="type">Array</span></div>
+          <div class="db-row"><span class="field">isPublished</span><span class="type">Boolean</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="db-table" style="margin-bottom:10px">
+          <div class="db-header"><span><i class="ti ti-sparkles" style="font-size:13px;margin-right:6px" aria-hidden="true"></i>Generation</span></div>
+          <div class="db-row"><span class="field">userId</span><span class="type">ObjectId</span></div>
+          <div class="db-row"><span class="field">prompt</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">generatedCode</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">model</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">creditsUsed</span><span class="type">Number</span></div>
+        </div>
+        <div class="db-table">
+          <div class="db-header"><span><i class="ti ti-credit-card" style="font-size:13px;margin-right:6px" aria-hidden="true"></i>Payment</span></div>
+          <div class="db-row"><span class="field">userId</span><span class="type">ObjectId</span></div>
+          <div class="db-row"><span class="field">amount</span><span class="type">Number</span></div>
+          <div class="db-row"><span class="field">creditsPurchased</span><span class="type">Number</span></div>
+          <div class="db-row"><span class="field">paymentId</span><span class="type">String</span></div>
+          <div class="db-row"><span class="field">status</span><span class="type">String</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">API endpoints</h2>
+    <div class="api-wrapper">
+      <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+        <table class="api-table">
+          <tr><td><span class="method post">POST</span><span class="route">/signup</span></td><td class="route-desc">Create account</td></tr>
+          <tr><td><span class="method post">POST</span><span class="route">/login</span></td><td class="route-desc">Issue JWT</td></tr>
+          <tr><td><span class="method get">GET</span><span class="route">/me</span></td><td class="route-desc">Current user</td></tr>
+          <tr><td><span class="method put">PUT</span><span class="route">/profile</span></td><td class="route-desc">Update profile</td></tr>
+          <tr><td><span class="method get">GET</span><span class="route">/components</span></td><td class="route-desc">List components</td></tr>
+          <tr><td><span class="method get">GET</span><span class="route">/components/:id</span></td><td class="route-desc">Single component</td></tr>
+          <tr><td><span class="method post">POST</span><span class="route">/generate</span></td><td class="route-desc">AI generation (costs credit)</td></tr>
+          <tr><td><span class="method get">GET</span><span class="route">/history</span></td><td class="route-desc">Generation history</td></tr>
+          <tr><td><span class="method delete">DELETE</span><span class="route">/history/:id</span></td><td class="route-desc">Delete generation</td></tr>
+          <tr><td><span class="method post">POST</span><span class="route">/create-order</span></td><td class="route-desc">Razorpay order</td></tr>
+          <tr><td><span class="method post">POST</span><span class="route">/verify-payment</span></td><td class="route-desc">Webhook verification</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Roadmap</h2>
+    <div class="roadmap">
+      <div class="phase"><div class="phase-num" style="background:#EEEDFE;color:#534AB7">1</div><div class="phase-body"><h4>Backend foundation</h4><p>Authentication, MongoDB, JWT, cookie sessions</p></div></div>
+      <div class="phase"><div class="phase-num" style="background:#E1F5EE;color:#0F6E56">2</div><div class="phase-body"><h4>Component library</h4><p>Component API, search, categories, NPM publishing</p></div></div>
+      <div class="phase"><div class="phase-num" style="background:#FAEEDA;color:#854F0B">3</div><div class="phase-body"><h4>AI integration</h4><p>OpenRouter, credits system, generation history</p></div></div>
+      <div class="phase"><div class="phase-num" style="background:#EAF3DE;color:#3B6D11">4</div><div class="phase-body"><h4>Payments</h4><p>Razorpay, credit purchase flows, webhook verification</p></div></div>
+      <div class="phase"><div class="phase-num" style="background:#E6F1FB;color:#185FA5">5</div><div class="phase-body"><h4>Frontend</h4><p>Dashboard, AI Studio, component library UI, profile</p></div></div>
+      <div class="phase"><div class="phase-num" style="background:#FAECE7;color:#993C1D">6</div><div class="phase-body"><h4>Deployment</h4><p>MongoDB Atlas, Render/Railway backend, Vercel frontend</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Frontend pages</h2>
+    <div class="tag-list">
+      <span class="tag blue">Landing</span>
+      <span class="tag teal">Pricing</span>
+      <span class="tag purple">Component library</span>
+      <span class="tag amber">AI studio</span>
+      <span class="tag coral">History</span>
+      <span class="tag blue">Dashboard</span>
+      <span class="tag teal">Profile</span>
+      <span class="tag">Auth</span>
+      <span class="tag">404</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Out of scope — future</h2>
+    <div class="tag-list">
+      <span class="tag">GitHub Login</span>
+      <span class="tag">Component collections</span>
+      <span class="tag">Publish to NPM</span>
+      <span class="tag">Team workspaces</span>
+      <span class="tag">Favorites</span>
+      <span class="tag">Comments</span>
+      <span class="tag">Dark/light marketplace</span>
+      <span class="tag">CLI tool</span>
+      <span class="tag">VS Code extension</span>
+      <span class="tag">Figma plugin</span>
+      <span class="tag">AI design-to-code</span>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
