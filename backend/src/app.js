@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
 import componentRoutes from "./modules/components/component.routes.js";
+import generationRoutes from "./modules/generations/generation.routes.js";
 
 const app = express();
 
@@ -12,9 +13,11 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("LubUI API is running");
 });
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/components", componentRoutes);
 app.use("/api/v1/ai", aiRoutes);
+app.use("/api/v1/generations", generationRoutes);
 
 // health
 app.get("/api/v1/health", (req, res) => {

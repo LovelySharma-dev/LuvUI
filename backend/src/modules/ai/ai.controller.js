@@ -37,7 +37,7 @@ export const generateComponent = async (req, res) => {
         $inc: { credits: -1 },
       },
       {
-        new: true,
+        returnDocument: "after",
       },
     );
 
