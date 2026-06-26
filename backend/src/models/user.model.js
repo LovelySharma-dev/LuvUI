@@ -19,28 +19,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 8,
       select: false, //do not return password by default
-      required: function () {
-        return this.provider === "local";
-      },
+      required: true,
     },
     avatar: {
       type: String,
       default: "",
     },
-    provider: {
-      type: String,
-      enum: ["local", "google"],
-      default: "local",
-    },
 
-    googleId: {
-      type: String,
-      unique: true,
-      sparse: true, //allow local user to coexist
-      required: function () {
-        return this.provider === "google";
-      },
-    },
     role: {
       type: String,
       enum: ["user", "admin"],
