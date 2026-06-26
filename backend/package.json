@@ -4,7 +4,10 @@
   "description": "An AI-powered React UI platform where developers install production-ready components from the LuvUI npm package and generate custom React components using AI.",
   "keywords": [
     "UI",
-    "Library","components", "ai", "design-ui"
+    "Library",
+    "components",
+    "ai",
+    "design-ui"
   ],
   "license": "ISC",
   "author": "Lovely Sharma",
