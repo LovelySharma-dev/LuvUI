@@ -24,7 +24,7 @@ export const getComponents = async (req, res) => {
     if (search) {
       query.name = {
         $regex: search,
-        $option: "i",
+        $options: "i",
       };
     }
 
@@ -36,11 +36,13 @@ export const getComponents = async (req, res) => {
 
     const total = await Component.countDocuments(query);
 
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
     return res.status(200).json({
       components,
       pagination: {
-        page: Number(page),
-        limit: Number(limit),
+        page: pageNum,
+        limit: limitNum,
         total,
         totalPages: Math.ceil(total / limit),
       },
