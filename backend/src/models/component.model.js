@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { COMPONENT_CATEGORIES } from "../constants/categories.js";
 
 const componentSchema = new mongoose.Schema(
   {
@@ -21,21 +22,7 @@ const componentSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: [
-        "buttons",
-        "cards",
-        "forms",
-        "inputs",
-        "modals",
-        "navigation",
-        "tables",
-        "loaders",
-        "avatars",
-        "dropdowns",
-        "pricing",
-        "hero",
-        "other",
-      ],
+      enum: COMPONENT_CATEGORIES,
     },
     tags: [
       {

@@ -9,11 +9,11 @@ export const generateToken = (userId, res) => {
   const token = jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: "7d",
   });
-
+  const isProduction = process.env.NODE_ENV === "production";
   res.cookie("jwt", token, {
     maxAge: 7 * 24 * 60 * 60 * 1000, //milisecond
     httpOnly: true, //prevent attack
-    sameSite: "lax",
+    sameSite: isProduction ? "none" : "lax",
     secure: process.env.NODE_ENV === "development" ? false : true,
   });
 
