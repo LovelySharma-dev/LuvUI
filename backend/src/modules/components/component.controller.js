@@ -51,6 +51,7 @@ export const getComponents = async (req, res) => {
     console.error("Error in getComponents:", error);
 
     return res.status(500).json({
+      success: false,
       message: "Internal Server error",
     });
   }
@@ -75,6 +76,7 @@ export const getComponent = async (req, res) => {
     console.error("Error in getComponent:", error);
   }
   return res.status(500).json({
+    success: false,
     message: "Intenal Server error",
   });
 };
