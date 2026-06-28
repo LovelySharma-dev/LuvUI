@@ -7,14 +7,15 @@ import {
   updateComponent,
 } from "./component.controller.js";
 import { protectedRoute } from "../../middlewares/auth.middleware.js";
+import { adminRoute } from "../../middlewares/admin.middleware.js";
 
 const router = express.Router();
 
 router.get("/", getComponents);
 router.get("/:slug", getComponent);
 
-router.post("/", protectedRoute, createComponent);
-router.put("/:id", protectedRoute, updateComponent);
-router.delete("/:id", protectedRoute, deleteComponent);
+router.post("/", protectedRoute, adminRoute, createComponent);
+router.put("/:id", protectedRoute, adminRoute, updateComponent);
+router.delete("/:id", protectedRoute, adminRoute, deleteComponent);
 
 export default router;
