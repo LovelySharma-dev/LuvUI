@@ -1,0 +1,15 @@
+export const COMPONENT_CATEGORIES = [
+  "buttons",
+  "cards",
+  "forms",
+  "inputs",
+  "modals",
+  "navigation",
+  "tables",
+  "loaders",
+  "avatars",
+  "dropdowns",
+  "pricing",
+  "hero",
+  "other",
+];

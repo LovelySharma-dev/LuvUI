@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Component from "../../models/component.model.js";
 
 export const getComponents = async (req, res) => {
@@ -28,23 +29,25 @@ export const getComponents = async (req, res) => {
       };
     }
 
+    const pageNum = Math.max(1, Number(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, Number(limit) || 10));
+
     const components = await Component.find(query)
       .select("name slug description category previewImage isPremium tags")
-      .skip((page - 1) * limit)
-      .limit(Number(limit))
+      .skip((page - 1) * limitNum)
+      .limit(limitNum)
       .sort({ createdAt: -1 });
 
     const total = await Component.countDocuments(query);
 
-    const pageNum = Number(page);
-    const limitNum = Number(limit);
     return res.status(200).json({
+      success: true,
       components,
       pagination: {
         page: pageNum,
         limit: limitNum,
         total,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limitNum),
       },
     });
   } catch (error) {
@@ -67,22 +70,111 @@ export const getComponent = async (req, res) => {
 
     if (!component) {
       return res.status(404).json({
+        success: false,
         message: "Component not found",
       });
     }
 
-    return res.status(200).json(component);
+    return res.status(200).json({
+      success: true,
+      component,
+    });
   } catch (error) {
     console.error("Error in getComponent:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Intenal Server error",
+    });
   }
-  return res.status(500).json({
-    success: false,
-    message: "Intenal Server error",
-  });
 };
 
-export const createComponent = async (req, res) => {};
+export const createComponent = async (req, res) => {
+  try {
+    const component = await Component.create(req.body);
 
-export const updateComponent = async (req, res) => {};
+    return res.status(201).json({
+      success: true,
+      component,
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    console.error("Error in Creating Component ", error);
 
-export const deleteComponent = async (req, res) => {};
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const updateComponent = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid component ID",
+    });
+  }
+  try {
+    const component = await Component.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { returnDocument: "after", runValidators: true },
+    );
+
+    if (!component) {
+      return res.status(404).json({
+        success: false,
+        message: "Component not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      component,
+    });
+  } catch (error) {
+    console.error("Error in Updating Component", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server error",
+    });
+  }
+};
+
+export const deleteComponent = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Component ID",
+    });
+  }
+
+  try {
+    const component = await Component.findByIdAndDelete(req.params.id);
+
+    if (!component) {
+      return res.status(404).json({
+        success: false,
+        message: "Component not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Component deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error in deleting Component", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server error",
+    });
+  }
+};
