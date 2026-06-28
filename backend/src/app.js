@@ -6,7 +6,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
 import componentRoutes from "./modules/components/component.routes.js";
 import generationRoutes from "./modules/generations/generation.routes.js";
-
+import paymentRoutes from "./modules/payments/payment.routes.js";
 const app = express();
 
 app.use(helmet());
@@ -29,6 +29,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/components", componentRoutes);
 app.use("/api/v1/ai", aiRoutes);
 app.use("/api/v1/generations", generationRoutes);
+app.use("/api/v1/payments", paymentRoutes);
 
 // health
 app.get("/api/v1/health", (req, res) => {
