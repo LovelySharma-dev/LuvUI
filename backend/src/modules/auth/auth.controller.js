@@ -44,17 +44,20 @@ export const signup = async (req, res) => {
     generateToken(savedUser._id, res);
 
     return res.status(201).json({
-      _id: savedUser._id,
-      fullName: savedUser.fullName,
-      email: savedUser.email,
-      avatar: savedUser.avatar,
-      credits: savedUser.credits,
+      success: true,
+      data: {
+        _id: savedUser._id,
+        fullName: savedUser.fullName,
+        email: savedUser.email,
+        avatar: savedUser.avatar,
+        credits: savedUser.credits,
+      },
     });
 
     //   send welcome email
   } catch (error) {
     console.error("Error in signup controller: ", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -83,15 +86,20 @@ export const login = async (req, res) => {
     generateToken(user._id, res);
 
     return res.status(200).json({
-      _id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      avatar: user.avatar,
-      credits: user.credits,
+      success: true,
+      data: {
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        avatar: user.avatar,
+        credits: user.credits,
+      },
     });
   } catch (error) {
     console.error("Error in login controller:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -105,6 +113,7 @@ export const logout = (_, res) => {
   });
 
   return res.status(200).json({
+    success: true,
     message: "Logged out successfully",
   });
 };
@@ -129,15 +138,19 @@ export const updateProfile = async (req, res) => {
     }
 
     return res.status(200).json({
-      _id: updatedUser._id,
-      fullName: updatedUser.fullName,
-      email: updatedUser.email,
-      avatar: updatedUser.avatar,
-      credits: updatedUser.credits,
+      success: true,
+      data: {
+        _id: updatedUser._id,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar,
+        credits: updatedUser.credits,
+      },
     });
   } catch (error) {
     console.error("Error in updatedProfile controller:", error);
     return res.status(500).json({
+      success: false,
       message: "Internal server error",
     });
   }
@@ -145,5 +158,8 @@ export const updateProfile = async (req, res) => {
 
 // checkAuth
 export const checkAuth = (req, res) => {
-  res.status(200).json(req.user);
+  res.status(200).json({
+    success: true,
+    data: req.user,
+  });
 };
